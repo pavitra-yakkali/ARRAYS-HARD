@@ -1,0 +1,98 @@
+//BRUTE
+import java.util.*;
+
+public class tUf {
+
+    // Function to find the repeating and missing numbers
+    public static int[] findMissingRepeatingNumbers(int[] a) {
+        int n = a.length;
+        int repeating = -1;
+        int missing = -1;
+
+        // Check each number from 1 to n
+        for (int i = 1; i <= n; i++) {
+            int count = 0;
+
+            // Count how many times i appears in the array
+            for (int j = 0; j < n; j++) {
+                if (a[j] == i) {
+                    count++;
+                }
+            }
+
+            // If a number appears twice, it's repeating
+            if (count == 2) {
+                repeating = i;
+            }
+
+            // If a number never appears, it's missing
+            else if (count == 0) {
+                missing = i;
+            }
+
+            // If both numbers are found, no need to continue
+            if (repeating != -1 && missing != -1) {
+                break;
+            }
+        }
+
+        // Return the results
+        return new int[]{repeating, missing};
+    }
+
+    public static void main(String[] args) {
+        int[] a = {3, 1, 2, 5, 4, 6, 7, 5}; // Input array
+        int[] ans = findMissingRepeatingNumbers(a); // Find the result
+
+        // Print the result
+        System.out.println("The repeating and missing numbers are: {"
+                + ans[0] + ", " + ans[1] + "}");
+    }
+}
+//OPTIMAL
+
+
+
+import java.util.*;
+
+public class tUf {
+
+    public static int[] findMissingRepeatingNumbers(int[] a) {
+        long n = a.length; // size of the array
+        // Find Sn and S2n:
+        long SN = (n * (n + 1)) / 2;
+        long S2N = (n * (n + 1) * (2 * n + 1)) / 6;
+
+        // Calculate S and S2:
+        long S = 0, S2 = 0;
+        for (int i = 0; i < n; i++) {
+            S += a[i];
+            S2 += (long)a[i] * (long)a[i];
+        }
+
+        //S-Sn = X-Y:
+        long val1 = S - SN;
+
+        // S2-S2n = X^2-Y^2:
+        long val2 = S2 - S2N;
+
+        //Find X+Y = (X^2-Y^2)/(X-Y):
+        val2 = val2 / val1;
+
+        //Find X and Y: X = ((X+Y)+(X-Y))/2 and Y = X-(X-Y),
+        // Here, X-Y = val1 and X+Y = val2:
+        long x = (val1 + val2) / 2;
+        long y = x - val1;
+
+        int[] ans = {(int)x, (int)y};
+        return ans;
+    }
+
+    public static void main(String[] args) {
+        int[] a = {3, 1, 2, 5, 4, 6, 7, 5};
+        int[] ans = findMissingRepeatingNumbers(a);
+        System.out.println("The repeating and missing numbers are: {"
+                           + ans[0] + ", " + ans[1] + "}");
+    }
+}
+
