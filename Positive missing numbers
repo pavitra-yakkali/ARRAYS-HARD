@@ -1,0 +1,46 @@
+import java.util.*;
+
+class Solution {
+    // Swap helper function
+    public void swap(int[] nums, int i, int idx) {
+        int temp = nums[i];
+        nums[i] = nums[idx];
+        nums[idx] = temp;
+    }
+
+    // Main algorithm to find first missing positive
+    public int firstMissingPositive(int[] nums) {
+        int n = nums.length;
+        int i = 0;
+
+        while (i < n) {
+            int idx = nums[i] - 1;
+            if (nums[i] < 1 || nums[i] > n || nums[i] == nums[idx]) {
+                i++;
+            } else {
+                swap(nums, i, idx);
+            }
+        }
+
+        for (i = 0; i < n; i++) {
+            if (nums[i] != i + 1) {
+                return i + 1;
+            }
+        }
+
+        return n + 1;
+    }
+
+    // Main function to test
+    public static void main(String[] args) {
+        Solution sol = new Solution();
+
+        int[] nums1 = {1, 2, 0};
+        int[] nums2 = {3, 4, -1, 1};
+        int[] nums3 = {7, 8, 9, 11, 12};
+
+        System.out.println("Missing positive in [1, 2, 0] → " + sol.firstMissingPositive(nums1)); // 3
+        System.out.println("Missing positive in [3, 4, -1, 1] → " + sol.firstMissingPositive(nums2)); // 2
+        System.out.println("Missing positive in [7, 8, 9, 11, 12] → " + sol.firstMissingPositive(nums3)); // 1
+    }
+}
