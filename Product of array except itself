@@ -1,0 +1,47 @@
+import java.util.*;
+
+class Solution {
+    public int[] productExceptSelf(int[] nums) {
+        int n = nums.length;
+        int pf[] = new int[n];
+        pf[0] = nums[0];
+
+        // Prefix product
+        for (int i = 1; i < n; i++) {
+            pf[i] = pf[i - 1] * nums[i];
+        }
+
+        // Suffix product and final answer
+        int suffix = 1;
+        for (int i = n - 1; i > 0; i--) {
+            pf[i] = pf[i - 1] * suffix;
+            suffix = suffix * nums[i];
+        }
+        pf[0] = suffix;
+
+        return pf;
+    }
+
+    public static void main(String[] args) {
+        Solution sol = new Solution();
+        int[] nums = {1, 2, 3, 4};   // Example input
+
+        int[] result = sol.productExceptSelf(nums);
+
+        System.out.println(Arrays.toString(result)); // Output -> [24, 12, 8, 6]
+    }
+}
+
+Explanation of TC & SC
+
+Time Complexity (TC):
+
+Prefix loop → O(n)
+
+Suffix loop → O(n)
+
+Total → O(n)
+
+Space Complexity (SC):
+
+Using only output array pf → O(1) 
